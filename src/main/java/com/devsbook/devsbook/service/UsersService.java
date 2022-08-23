@@ -4,6 +4,7 @@ package com.devsbook.devsbook.service;
 import com.devsbook.devsbook.entity.User;
 import com.devsbook.devsbook.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,9 @@ import java.util.Base64;
 public class UsersService {
 
     UserRepository userRepository;
+
+    @Value("${default.profile.picture}")
+    String defaultProfilePic;
 
 
     @Autowired
@@ -50,11 +54,20 @@ public class UsersService {
         if (checkedUser.equals("0")) {
             user.setCreateTime(LocalDateTime.now());
             user.setToken(generateToken(user));
+            user.setProfilePhoto(defaultProfilePic);
             User user1 = userRepository.save(user);
             return user1.getName();
         } else
             return "0";
     }
+
+    public User getUserByToken(String token){
+        User user = userRepository.findByToken(token);
+        return user;
+    }
+
+
+
 
     public void deleteAll() {
         userRepository.deleteAll();

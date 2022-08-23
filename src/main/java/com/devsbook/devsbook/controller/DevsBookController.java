@@ -1,7 +1,9 @@
 package com.devsbook.devsbook.controller;
 
 
+import com.devsbook.devsbook.DTO.Response.UserData;
 import com.devsbook.devsbook.entity.User;
+import com.devsbook.devsbook.service.PostsService;
 import com.devsbook.devsbook.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,11 +12,15 @@ import org.springframework.web.bind.annotation.*;
 public class DevsBookController {
 
     UsersService usersService;
+    PostsService postsService;
 
     @Autowired
-    public DevsBookController(UsersService usersService) {
+    public DevsBookController(PostsService postsService, UsersService usersService) {
+        this.postsService = postsService;
         this.usersService = usersService;
     }
+
+
 
     @CrossOrigin
     @GetMapping("/checkUser")
@@ -29,6 +35,11 @@ public class DevsBookController {
           return usersService.createUser(user);
     }
 
+    @CrossOrigin
+    @GetMapping("/findUser")
+    public User findUser(@RequestParam String token){
+        return usersService.getUserByToken(token);
+    }
 
     @GetMapping("/deleteAll")
     public void deleteAll(){
@@ -36,4 +47,16 @@ public class DevsBookController {
     }
 
 
+    @CrossOrigin
+    @GetMapping("/countData")
+    public UserData countData(@RequestParam int userId){
+        int countPosts = postsService.countPost(userId);
+        int countPostImages = postsService.countPostImage(userId);
+        UserData userData = UserData.builder()
+                .FriendsCount(0)
+                .PhotosCount(countPostImages)
+                .PostsCount(countPosts)
+                .build();
+        return userData;
+    }
 }
