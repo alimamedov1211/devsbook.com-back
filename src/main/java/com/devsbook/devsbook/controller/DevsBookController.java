@@ -21,35 +21,34 @@ public class DevsBookController {
     }
 
 
-
     @CrossOrigin
     @GetMapping("/checkUser")
-    public String checkUser(@RequestParam String mail, @RequestParam String password){
-        return usersService.checkUser(mail,password);
+    public String checkUser(@RequestParam String mail, @RequestParam String password) {
+        return usersService.checkUser(mail, password);
     }
 
 
     @CrossOrigin
     @PostMapping("/createUser")
-    public String createUser(@RequestBody User user){
-          return usersService.createUser(user);
+    public String createUser(@RequestBody User user) {
+        return usersService.createUser(user);
     }
 
     @CrossOrigin
     @GetMapping("/findUser")
-    public User findUser(@RequestParam String token){
+    public User findUser(@RequestParam String token) {
         return usersService.getUserByToken(token);
     }
 
     @GetMapping("/deleteAll")
-    public void deleteAll(){
+    public void deleteAll() {
         usersService.deleteAll();
     }
 
 
     @CrossOrigin
     @GetMapping("/countData")
-    public UserData countData(@RequestParam int userId){
+    public UserData countData(@RequestParam int userId) {
         int countPosts = postsService.countPost(userId);
         int countPostImages = postsService.countPostImage(userId);
         UserData userData = UserData.builder()
@@ -58,5 +57,12 @@ public class DevsBookController {
                 .PostsCount(countPosts)
                 .build();
         return userData;
+    }
+
+
+    @CrossOrigin
+    @PostMapping("/changeProfilePic")
+    public void changeProfilePic(@RequestBody String base64, @RequestHeader String token) {
+        usersService.changeProfilePic(base64, token);
     }
 }

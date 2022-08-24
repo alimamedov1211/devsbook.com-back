@@ -66,6 +66,11 @@ public class UsersService {
         return user;
     }
 
+    public void changeProfilePic(String base64, String token){
+        User user = userRepository.findByToken(token);
+        user.setProfilePhoto(base64);
+        userRepository.save(user);
+    }
 
 
 

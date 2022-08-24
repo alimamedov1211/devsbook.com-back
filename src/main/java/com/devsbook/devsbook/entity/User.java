@@ -33,7 +33,7 @@ public class User {
 
 
 
-    @Column(nullable = false,unique = false, length = 10485760)
+    @Column(nullable = true,unique = false, length = 10485760)
     private String ProfilePhoto;
 
     @Column(nullable = false, unique = true, length = 255)
@@ -43,4 +43,6 @@ public class User {
 
     public User() {
     }
+
+
 }
