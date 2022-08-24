@@ -8,6 +8,8 @@ import com.devsbook.devsbook.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @RestController
 public class DevsBookController {
 
@@ -64,5 +66,19 @@ public class DevsBookController {
     @PostMapping("/changeProfilePic")
     public void changeProfilePic(@RequestBody String base64, @RequestHeader String token) {
         usersService.changeProfilePic(base64, token);
+    }
+
+
+    @CrossOrigin
+    @GetMapping("/findAll")
+    public ArrayList<User> findAllUsers(){
+       return usersService.getUsers();
+    }
+
+
+    @CrossOrigin
+    @GetMapping("/sendFriendRequest")
+    public void sendFriendRequest(@RequestParam String requestToken, @RequestHeader String token){
+
     }
 }

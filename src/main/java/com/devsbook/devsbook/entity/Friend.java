@@ -26,6 +26,7 @@ public class Friend {
     @Column(nullable = true,unique = false, length = 10485760)
     private String friendsId;
     private String friendRequestsId;
+    private String myRequestsId;
 
     public Friend() {
     }

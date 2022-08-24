@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Base64;
 
 @Service
@@ -70,6 +71,11 @@ public class UsersService {
         User user = userRepository.findByToken(token);
         user.setProfilePhoto(base64);
         userRepository.save(user);
+    }
+
+
+    public ArrayList<User> getUsers(){
+        return userRepository.findAll();
     }
 
 
