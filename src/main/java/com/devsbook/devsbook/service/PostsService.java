@@ -1,6 +1,7 @@
 package com.devsbook.devsbook.service;
 
 
+import com.devsbook.devsbook.entity.Post;
 import com.devsbook.devsbook.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +28,10 @@ public class PostsService {
 
     public int countPostImage(int userId) {
         return postRepository.countPostByUserIdAndPostType(userId, postType);
+    }
+
+    public void createNewPost(Post post){
+        postRepository.save(post);
     }
 
 }

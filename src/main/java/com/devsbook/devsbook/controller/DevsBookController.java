@@ -3,6 +3,7 @@ package com.devsbook.devsbook.controller;
 
 import com.devsbook.devsbook.DTO.Response.UserData;
 import com.devsbook.devsbook.entity.User;
+import com.devsbook.devsbook.service.FriendsService;
 import com.devsbook.devsbook.service.PostsService;
 import com.devsbook.devsbook.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,13 @@ public class DevsBookController {
 
     UsersService usersService;
     PostsService postsService;
+    FriendsService friendsService;
 
     @Autowired
-    public DevsBookController(PostsService postsService, UsersService usersService) {
-        this.postsService = postsService;
+    public DevsBookController(UsersService usersService, PostsService postsService, FriendsService friendsService) {
         this.usersService = usersService;
+        this.postsService = postsService;
+        this.friendsService = friendsService;
     }
 
 
@@ -53,6 +56,7 @@ public class DevsBookController {
     public UserData countData(@RequestParam int userId) {
         int countPosts = postsService.countPost(userId);
         int countPostImages = postsService.countPostImage(userId);
+//        int countFriends = friendsService
         UserData userData = UserData.builder()
                 .FriendsCount(0)
                 .PhotosCount(countPostImages)
@@ -78,7 +82,9 @@ public class DevsBookController {
 
     @CrossOrigin
     @GetMapping("/sendFriendRequest")
-    public void sendFriendRequest(@RequestParam String requestToken, @RequestHeader String token){
-
+    public void sendFriendRequest(@RequestParam int userId, @RequestParam int requestId){
+        friendsService.friendRequest(userId,requestId);
     }
+
+
 }

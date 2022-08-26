@@ -1,6 +1,8 @@
 package com.devsbook.devsbook.service;
 
 
+import com.devsbook.devsbook.entity.Friend;
+import com.devsbook.devsbook.entity.Post;
 import com.devsbook.devsbook.entity.User;
 import com.devsbook.devsbook.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +17,17 @@ import java.util.Base64;
 public class UsersService {
 
     UserRepository userRepository;
+    FriendsService friendsService;
 
     @Value("${default.profile.picture}")
     String defaultProfilePic;
 
-
     @Autowired
-    public UsersService(UserRepository userRepository) {
+    public UsersService(UserRepository userRepository, FriendsService friendsService) {
         this.userRepository = userRepository;
+        this.friendsService = friendsService;
     }
+
 
     private String generateToken(User user) {
         String values = user.getEmail() + "*_*" + user.getName() + "*_*" + user.getSurname();
@@ -57,6 +61,10 @@ public class UsersService {
             user.setToken(generateToken(user));
             user.setProfilePhoto(defaultProfilePic);
             User user1 = userRepository.save(user);
+            Friend friend = Friend.builder()
+                    .userId(user1.getId())
+                    .build();
+            friendsService.createNewFriend(friend);
             return user1.getName();
         } else
             return "0";
