@@ -2,6 +2,7 @@ package com.devsbook.devsbook.controller;
 
 
 import com.devsbook.devsbook.DTO.Response.UserData;
+import com.devsbook.devsbook.entity.Friend;
 import com.devsbook.devsbook.entity.User;
 import com.devsbook.devsbook.service.FriendsService;
 import com.devsbook.devsbook.service.PostsService;
@@ -54,15 +55,7 @@ public class DevsBookController {
     @CrossOrigin
     @GetMapping("/countData")
     public UserData countData(@RequestParam int userId) {
-        int countPosts = postsService.countPost(userId);
-        int countPostImages = postsService.countPostImage(userId);
-//        int countFriends = friendsService
-        UserData userData = UserData.builder()
-                .FriendsCount(0)
-                .PhotosCount(countPostImages)
-                .PostsCount(countPosts)
-                .build();
-        return userData;
+        return usersService.countData(userId);
     }
 
 
@@ -81,9 +74,15 @@ public class DevsBookController {
 
 
     @CrossOrigin
-    @GetMapping("/sendFriendRequest")
-    public void sendFriendRequest(@RequestParam int userId, @RequestParam int requestId){
-        friendsService.friendRequest(userId,requestId);
+    @PostMapping("/updateFriend")
+    public Friend sendFriendRequest(@RequestBody Friend friend){
+        return friendsService.updateFriend(friend);
+    }
+
+    @CrossOrigin
+    @GetMapping("/getFriend")
+    public Friend getFriend(@RequestParam int userId){
+        return friendsService.getFriend(userId);
     }
 
 

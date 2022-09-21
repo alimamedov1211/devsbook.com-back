@@ -1,6 +1,7 @@
 package com.devsbook.devsbook.service;
 
 
+import com.devsbook.devsbook.DTO.Response.UserData;
 import com.devsbook.devsbook.entity.Friend;
 import com.devsbook.devsbook.entity.Post;
 import com.devsbook.devsbook.entity.User;
@@ -18,14 +19,16 @@ public class UsersService {
 
     UserRepository userRepository;
     FriendsService friendsService;
+    PostsService postsService;
 
     @Value("${default.profile.picture}")
     String defaultProfilePic;
 
     @Autowired
-    public UsersService(UserRepository userRepository, FriendsService friendsService) {
+    public UsersService(UserRepository userRepository, FriendsService friendsService, PostsService postsService) {
         this.userRepository = userRepository;
         this.friendsService = friendsService;
+        this.postsService = postsService;
     }
 
 
@@ -81,6 +84,25 @@ public class UsersService {
         userRepository.save(user);
     }
 
+    public UserData countData(int userId) {
+        int countFriends;
+        int countPosts = postsService.countPost(userId);
+        int countPostImages = postsService.countPostImage(userId);
+        Friend friend = friendsService.getFriend(userId);
+        String friendsList = friend.getFriendsId();
+        if (friendsList==null){
+            countFriends = 0;
+        }
+        else {
+            countFriends = friendsList.split(",").length;
+        }
+        UserData userData = UserData.builder()
+                .FriendsCount(countFriends)
+                .PhotosCount(countPostImages)
+                .PostsCount(countPosts)
+                .build();
+        return userData;
+    }
 
     public ArrayList<User> getUsers(){
         return userRepository.findAll();

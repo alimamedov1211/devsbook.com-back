@@ -16,20 +16,21 @@ public class FriendsService {
     }
 
 
-    public void friendRequest(int userId, int requestId) {
-        Friend friend = friendRepository.findByUserId(userId);
-        String myRequestId = friend.getMyRequestsId();
-        if (myRequestId == null) {
-            myRequestId = "" + requestId;
-        } else
-            myRequestId += "," + requestId;
-        friend.setMyRequestsId(myRequestId);
+    public void createNewFriend(Friend friend) {
         friendRepository.save(friend);
     }
 
+    public Friend updateFriend(Friend friend) {
+        int userId = friend.getUserId();
+        Friend user = friendRepository.findByUserId(userId);
+        user.setFriendRequestsId(friend.getFriendRequestsId());
+        user.setFriendsId(friend.getFriendsId());
+        user.setMyRequestsId(friend.getMyRequestsId());
+        return friendRepository.save(user);
+    }
 
-    public void createNewFriend(Friend friend) {
-        friendRepository.save(friend);
+    public Friend getFriend(int userId) {
+        return friendRepository.findByUserId(userId);
     }
 
 
